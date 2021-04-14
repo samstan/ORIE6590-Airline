@@ -1,1 +1,1 @@
-from n_server.envs.n_server import NServerEnv
+from n_server.envs.n_server import AirlineEnv
