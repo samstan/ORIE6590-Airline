@@ -58,8 +58,8 @@ class AirlineEnv(gym.Env):
         transition_probs = {}
         for j in range(len(action)):
             nState = state - np.matmul(self.A[:, j ], action[j])
-            if not np.all(nState == state):
-                transition_probs[nState] == self.P[t, j]
+            if not np.all(nState == state) and len(nState[nState < 0]) == 0:
+                    transition_probs[nState] == self.P[t, j]
         transition_probs[state] = 1 - sum(transition_probs.values())
         
         return transition_probs
