@@ -12,12 +12,14 @@ class AirlineEnv(gym.Env):
         self.A = config['A']
         self.f = config['f']
         self.P = config['P']
+        self.tau = config['tau']
         self.starting_state = config['starting_state']
 
         # Defines state and action spaces, sets current state to be starting_state
-        self.action_space = gym.spaces.MultiDiscrete([1]*len(self.A.shape[1]))
-        self.observation_space = gym.spaces.MultiDiscrete(self.starting_state)
-        self.state = np.asarray(self.starting_state)
+        self.action_space = gym.spaces.MultiDiscrete([2]*self.A.shape[1])
+        sstate = np.asarray(self.starting_state) + 1
+        self.observation_space = gym.spaces.MultiDiscrete(sstate) 
+        self.state = sstate
 
     # Resets environment to initial state
     def reset(self):
@@ -36,7 +38,7 @@ class AirlineEnv(gym.Env):
         states = list(trans.keys())
         probs = list(trans.values())
         # Computes new state
-        newState = np.asarry(states[np.random.choice(range(len(states)), 1, p = probs)[0]])
+        newState = np.asarray(states[np.random.choice(range(len(states)), 1, p = probs)[0]])
         reward = self.r(self.state, newState)
         self.state = newState
         episode_over = False
@@ -51,15 +53,15 @@ class AirlineEnv(gym.Env):
             return 0
         else:
             difInd = np.amax(state-newState)
-            return f[difInd]
+            return self.f[difInd]
 
     # Auxilary function computing transition distribution
     def pr(self, state, action, t):
         transition_probs = {}
         for j in range(len(action)):
-            nState = state - np.matmul(self.A[:, j ], action[j])
+            nState = np.copy(state) - self.A[:, j ]*action[j]
             if not np.all(nState == state) and len(nState[nState < 0]) == 0:
-                    transition_probs[nState] == self.P[t, j]
-        transition_probs[state] = 1 - sum(transition_probs.values())
+                    transition_probs[tuple(nState)] = self.P[t, j]
+        transition_probs[tuple(state)] = 1 - sum(transition_probs.values())
         
         return transition_probs
