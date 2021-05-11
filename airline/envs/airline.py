@@ -20,21 +20,23 @@ class AirlineEnv(gym.Env):
         sstate = np.asarray(self.starting_state) + 1
         self.observation_space = gym.spaces.MultiDiscrete(sstate) 
         self.state = sstate
+        self.timestep = 0
 
     # Resets environment to initial state
     def reset(self):
         self.state = np.asarray(self.starting_state)
+        self.timestep = 0
         return self.state
 
     # Defines one step of the MDP, returning the new state, reward, whether time horizon is finished, and a dictionary of information
-    def step(self, action, t):
+    def step(self, action):
         
         # Just for personal double checking for Q learning algortihm, can ignore this
         # if self.state[0] == self.N and self.state[1] == self.N and action[0] == 0 and action[1] == 0:
             # print('Uh oh, stuck at absorbing state')
         
         
-        trans = self.pr(self.state, action, t)
+        trans = self.pr(self.state, action, self.timestep)
         states = list(trans.keys())
         probs = list(trans.values())
         # Computes new state
@@ -42,6 +44,7 @@ class AirlineEnv(gym.Env):
         reward = self.r(self.state, newState)
         self.state = newState
         episode_over = False
+        self.timestep += 1
 
         return self.state, reward, episode_over, {}
 
