@@ -1,6 +1,6 @@
 # Introduction
 
-In this project, we consider a simplified airline revenue management task using bid-price control. As a motivating example, consider a scenario involving a fictional airline company called Ithaca Flies. Ithaca Flies only operates three direct flights: Ithaca to NEK, Ithaca to Detroit, and Detroit to LA. Additionally, one may elect to fly from Ithaca to LA via Detroit. Each flight has economy and business seats. Ithaca Flies implements a bid-price control policy to sell tickets on these flights, where the bid-prices are the fixed trip fares. The goal of the controller is to maximize revenue. Previous approaches to this task used linear programming, while we aim to use deep reinforcement learning.
+In this project, we consider a simplified airline revenue management task using bid-price control. As a motivating example, consider a scenario involving a fictional airline company called Ithaca Flies. Ithaca Flies only operates three direct flights: Ithaca to NEK, Ithaca to Detroit, and Detroit to LA. Additionally, one may elect to fly from Ithaca to LA via Detroit. Each flight has economy and business seats. Ithaca Flies implements a bid-price control policy to sell tickets on these flights, where the bid-prices are the fixed trip fares. The goal of the controller is to maximize revenue. Previous approaches to this task used linear programming, while we aim to use deep reinforcement learning. In particular, we use the popular Advantage Actor Critic (A2C) algorithm using three different sets of neural network architectures.
 
 # Problem Formulation
 
@@ -20,7 +20,7 @@ Transitions: given state s and action a, with probability p_{t,j} the next state
 
 # Usage
 
-The test.ipynb Jupyter notebook contains all of the code required to run on the Airline environment. It already imports the custom environment as well as our custom policy classes.
+The test.ipynb Jupyter notebook contains all of the code required to run on the Airline environment. It already imports the custom environment as well as our custom policy classes. It should be self-evident which blocks to run to vary the network architecture.
 
 # Dependencies
 Python 3.8.5, stable-baselines3 1.0, gym 0.18.0, numpy 1.20.1, torch 1.8.1.
