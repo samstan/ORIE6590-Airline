@@ -17,7 +17,7 @@ class AirlineEnv(gym.Env):
 
 
         # Defines state and action spaces, sets current state to be starting_state
-        self.action_space = gym.spaces.Discrete(self.A.shape[1] + 1 )
+        self.action_space = gym.spaces.MultiBinary(self.A.shape[1])
         sstate = np.asarray(self.starting_state) + 1
         self.observation_space = gym.spaces.MultiDiscrete(sstate) 
         self.state = np.asarray(self.starting_state)
@@ -35,12 +35,24 @@ class AirlineEnv(gym.Env):
         # Just for personal double checking for Q learning algortihm, can ignore this
         # if self.state[0] == self.N and self.state[1] == self.N and action[0] == 0 and action[1] == 0:
             # print('Uh oh, stuck at absorbing state')
-        trans = self.pr(self.state, action, self.timestep)
-        states = list(trans.keys())
-        probs = list(trans.values())
-        # Computes new state
-        newState = np.asarray(states[np.random.choice(range(len(states)), 1, p = probs)[0]])
-        reward = self.r(self.state, newState, action)
+        #Sample customer arrival
+        pDist = np.append(np.copy(self.P[self.timestep, :]), 1 -np.sum(self.P[self.timestep, :]))
+        customer = np.random.choice(range(self.A.shape[1]+1), 1, p = pDist)[0]
+
+        #Check if valid action
+        valid = True
+        for j in range(len(action)):
+            nState = np.copy(self.state) - self.A[:, j ]*action[j]
+            if not len(nState[nState < 0]) == 0:
+                valid = False
+
+        # Given a valid action
+        newState = np.copy(self.state)
+        reward = 0
+        if (not customer == self.A.shape[1]) and valid:
+            if action[customer] == 1:
+                newState = np.copy(self.state) - self.A[:, customer]
+                reward = self.r(self.state, newState, customer)
         self.state = newState
         episode_over = False
         self.timestep += 1
@@ -51,14 +63,11 @@ class AirlineEnv(gym.Env):
 
 
     # Auxilary function computing the reward
-    def r(self, state, newState, action):
+    def r(self, state, newState, customer):
         if np.all(state == newState):
             return 0
         else:
-            if action == self.A.shape[1]:
-                return 0
-            else:
-                return self.f[action]
+            return self.f[customer]
 
     # Auxilary function computing transition distribution
     def pr(self, state, action, t):
