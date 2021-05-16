@@ -64,22 +64,5 @@ class AirlineEnv(gym.Env):
 
     # Auxilary function computing the reward
     def r(self, state, newState, customer):
-        if np.all(state == newState):
-            return 0
-        else:
-            return self.f[customer]
+        return self.f[customer]
 
-    # Auxilary function computing transition distribution
-    def pr(self, state, action, t):
-        transition_probs = {}
-        if action == self.A.shape[1]:
-            transition_probs[tuple(state)] = 1
-        else:
-            actionVec = [0]*self.A.shape[1]
-            actionVec[action] = 1
-            for j in range(len(actionVec)):
-                nState = np.copy(state) - self.A[:, j ]*actionVec[j]
-                if not np.all(nState == state) and len(nState[nState < 0]) == 0:
-                    transition_probs[tuple(nState)] = self.P[t, j]
-            transition_probs[tuple(state)] = 1 - sum(transition_probs.values())
-        return transition_probs
