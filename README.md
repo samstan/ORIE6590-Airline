@@ -22,5 +22,10 @@ Transitions: given state s and action a, with probability p_{t,j} the next state
 
 The test.ipynb Jupyter notebook contains all of the code required to run on the Airline environment. It already imports the custom environment as well as our custom policy classes.
 
+# Dependencies
+Python 3.8.5, stable-baselines3 1.0, gym 0.18.0, numpy 1.20.1, torch 1.8.1.
+
+Note that on Intel Macs, you may need to also run "pip install nomkl" as the Intel Math Kernel Library seems to not play nicely with pytorch.
+
 
 [1]. Adelman, D. (2007). Dynamic bid prices in revenue management. Operations Research, 55(4), 647-661.
