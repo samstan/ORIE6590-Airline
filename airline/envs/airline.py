@@ -15,8 +15,9 @@ class AirlineEnv(gym.Env):
         self.tau = config['tau']
         self.starting_state = config['starting_state']
 
+
         # Defines state and action spaces, sets current state to be starting_state
-        self.action_space = gym.spaces.MultiBinary(n =self.A.shape[1] )
+        self.action_space = gym.spaces.Discrete(self.A.shape[1] + 1 )
         sstate = np.asarray(self.starting_state) + 1
         self.observation_space = gym.spaces.MultiDiscrete(sstate) 
         self.state = np.asarray(self.starting_state)
@@ -54,17 +55,22 @@ class AirlineEnv(gym.Env):
         if np.all(state == newState):
             return 0
         else:
-            return self.f[np.argmax(action)]
+            if action == self.A.shape[1]:
+                return 0
+            else:
+                return self.f[action]
 
     # Auxilary function computing transition distribution
     def pr(self, state, action, t):
         transition_probs = {}
-        if np.sum(action) == 1:
-            for j in range(len(action)):
-                nState = np.copy(state) - self.A[:, j ]*action[j]
+        if action == self.A.shape[1]:
+            transition_probs[tuple(state)] = 1
+        else:
+            actionVec = [0]*self.A.shape[1]
+            actionVec[action] = 1
+            for j in range(len(actionVec)):
+                nState = np.copy(state) - self.A[:, j ]*actionVec[j]
                 if not np.all(nState == state) and len(nState[nState < 0]) == 0:
                     transition_probs[tuple(nState)] = self.P[t, j]
             transition_probs[tuple(state)] = 1 - sum(transition_probs.values())
-        else:
-            transition_probs[tuple(state)] = 1
         return transition_probs
