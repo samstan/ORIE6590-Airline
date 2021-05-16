@@ -64,5 +64,5 @@ class AirlineEnv(gym.Env):
 
     # Auxilary function computing the reward
     def r(self, state, newState, customer):
-        return self.f[customer]
+        return float(self.f[customer])
 
