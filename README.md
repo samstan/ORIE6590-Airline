@@ -1,6 +1,8 @@
 # Introduction
 
-In this project, we consider a simplified airline revenue management task using bid-price control. As a motivating example, consider a scenario involving a fictional airline company called Ithaca Flies. Ithaca Flies only operates three direct flights: Ithaca to NEK, Ithaca to Detroit, and Detroit to LA. Additionally, one may elect to fly from Ithaca to LA via Detroit. Each flight has economy and business seats. Ithaca Flies implements a bid-price control policy to sell tickets on these flights, where the bid-prices are the fixed trip fares. The goal of the controller is to maximize revenue. Previous approaches to this task used linear programming, while we aim to use deep reinforcement learning. In particular, we use the popular Advantage Actor Critic (A2C) algorithm using three different sets of neural network architectures.
+In this project, we consider a simplified airline revenue management task using bid-price control. Bid-price control is a common example of revenue management, a common problem in operations research. Companies must delicately balance accepting arriving bids to earn revenue immediately, while also conserving resources for future bids. The structure of this problem makes it particularly suitable to model as a Markov Decision Process.
+
+As a motivating example, consider a scenario involving a fictional airline company called Ithaca Flies. Ithaca Flies only operates three direct flights: Ithaca to NEK, Ithaca to Detroit, and Detroit to LA. Additionally, one may elect to fly from Ithaca to LA via Detroit. Each flight has economy and business seats. Ithaca Flies implements a bid-price control policy to sell tickets on these flights, where the bid-prices are the fixed trip fares. The goal of the controller is to maximize revenue. Previous approaches to this task used linear programming, while we aim to use deep reinforcement learning. In particular, we use the popular Advantage Actor Critic (A2C) algorithm using three different sets of neural network architectures. We hope this approach will serve as a more flexible approach the task of bid-price control for airline revenue management. 
 
 # Problem Formulation
 
@@ -23,7 +25,7 @@ Transitions: given state s and action a, with probability p_{t,j} the next state
 The test.ipynb Jupyter notebook contains all of the code required to run on the Airline environment. It already imports the custom environment as well as our custom policy classes. It should be self-evident which blocks to run to vary the network architecture.
 
 # Dependencies
-Python 3.8.5, stable-baselines3 1.0, gym 0.18.0, numpy 1.20.1, torch 1.8.1.
+Python 3.8.5, stable-baselines3 1.0, gym 0.18.0, numpy 1.20.1, torch 1.8.1, jupyterlab 3.0.14.
 
 Note that on Intel Macs, you may need to also run "pip install nomkl" as the Intel Math Kernel Library seems to not play nicely with pytorch.
 
