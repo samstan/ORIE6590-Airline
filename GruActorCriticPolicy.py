@@ -43,8 +43,8 @@ class CustomNetwork(nn.Module):
         # Value network
         self.value_net = nn.GRU(
                 input_size=feature_dim,    # 45, see the data definition
-                hidden_size=8,    # Can vary
-                num_layers = 3
+                hidden_size=5,    # Can vary
+                num_layers = 2
 
             )
 

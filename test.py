@@ -8,6 +8,7 @@ from stable_baselines3.common.env_checker import check_env
 from stable_baselines3.common.policies import ActorCriticPolicy
 import torch as th
 from torch import nn
+import time
 
 def evaluate(model, env, numiters):
     rewards = []
@@ -109,4 +110,7 @@ class CustomActorCriticPolicy(ActorCriticPolicy):
 
 
 model = A2C(CustomActorCriticPolicy, env, verbose=1)
-model.learn(5000)
+start = time.time()
+model.learn(250000)
+print(time.time() - start)
+print(evaluate(model, env, 50))
